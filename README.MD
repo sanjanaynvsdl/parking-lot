@@ -3,234 +3,80 @@
 ## Requirements
 
 ### Functional Requirements
-- **Multi-Floor Support**: Parking lot has multiple floors and each floor has parking spots
-- **Entry/Exit Management**: Multiple entry and exit gates in the ground floor
-- **Ticket System**: Customer collects ticket at the entry gate, with entry time and slot number
-- **Payment Processing**: Customers make payment on exit gate
-- **Capacity Management**: If parking lot is full, no entry allowed
-- **Vehicle Types**: Support for different vehicle types - auto, bus, bike, EV vehicles
-- **Special Features**: Some parking spots have power plugs for EV charging
-- **Flexible Allocation**: Small vehicles can be parked in large vehicle spots
-- **Smart Allocation**: Allocate nearest available spot
-- **Scalability**: System can be extended with more floors and slots in future
+ 1. **MultiFloor Support**: Parking lot has multiple floors and each floor has parking spots </br>
+ 2. **Entry/Exit Management**: Multiple entry and exit gates in the ground floor </br>
+ 3. **Ticket System**: Customer collects ticket at the entry gate, with entry time and slot number </br>
+ 4. **Payment Processing**: Customers make payment on exit gate </br>
+ 5. **Capacity Management**: If parking lot is full, no entry allowed </br>
+ 6. **Vehicle Types**: Support for different vehicle types  auto, bus, bike, EV vehicles </br>
+ 7. **Special Features**: Some parking spots have power plugs for EV charging </br>
+ 8. **Flexible Allocation**: Small vehicles can be parked in large vehicle spots </br>
+ 9. **Smart Allocation**: Allocate nearest available spot </br>
+ 10. **Scalability**: System can be extended with more floors and slots in future </br>
+ 11. **Ticket**: Contains Vehicle Number | Entry Gate ID | Entry Time | Slot </br>
+ 12. **Bill**: Charges according to spot | Extra charges for electricity usage | Time-based pricing </br>
 
-- **Ticket**: Contains Vehicle Number | Entry Gate ID | Entry Time | Slot
-- **Bill**: Charges according to spot | Extra charges for electricity usage | Time-based pricing
+## Class Diagram
 
-## System Architecture
-classDiagram
-    direction TB
+![Class Diagram](class-diagram.png)
 
-    %% Enums
-    class VehicleType {
-        <<enumeration>>
-        BIKE
-        AUTO
-        CAR
-        BUS
-    }
+## Architecture Overview
 
-    class FuelType {
-        <<enumeration>>
-        PETROL
-        DIESEL
-        ELECTRIC
-        HYBRID
-    }
+The parking lot system follows object-oriented design principles with clear separation of concerns:
 
-    class SlotType {
-        <<enumeration>>
-        SMALL
-        MEDIUM
-        LARGE
-    }
+### Core Components
 
-    class SlotStatus {
-        <<enumeration>>
-        FILLED
-        EMPTY
-        MAINTENANCE
-    }
+- **ParkingLot**: Main orchestrator managing floors, gates, and overall operations
+- **ParkingFloor**: Represents individual floors with multiple parking slots
+- **ParkingSlot**: Individual parking spaces with type, status, and charging capabilities
+- **EntryGate/ExitGate**: Handle vehicle entry/exit and ticket/bill generation
+- **Vehicle**: Represents different vehicle types (Car, Bike, Bus, EV)
+- **Ticket/Bill**: Transaction records for parking sessions
 
-    class Payment {
-        <<enumeration>>
-        CASH
-        UPI
-        CARD
-    }
+### Strategy Patterns
 
-    %% Interfaces
-    class SlotAllocationStrategy {
-        <<interface>>
-        +allocateParkingSlot(vehicle: Vehicle, parkingLot: ParkingLot) ParkingSlot
-    }
+- **SlotAllocationStrategy**: Pluggable algorithms for slot assignment (NearestSlotStrategy)
+- **PricingStrategy**: Flexible pricing models (DynamicPricing, PerHourPricing)
 
-    class PricingStrategy {
-        <<interface>>
-        +calculatePrice(ticket: Ticket) double
-    }
+### Key Design Features
 
-    %% Models
-    class Vehicle {
-        -vehicalNo: String
-        -vehicleType: VehicleType
-        -fuelType: FuelType
-        +getVehicalNo(): String
-        +getVehicleType(): VehicleType
-        +getFuelType(): FuelType
-    }
+- **Strategy Pattern**: For slot allocation and pricing flexibility
+- **Enum-based Type Safety**: Vehicle types, slot types, payment methods
+- **Extensible Architecture**: Easy to add new floors, slot types, and strategies
+- **EV Support**: Special handling for electric vehicle charging requirements
 
-    class ParkingSlot {
-        -slotId: String
-        -slotType: SlotType
-        -currVehicle: Vehicle
-        -slotStatus: SlotStatus
-        -isChargingAvailable: boolean
-        +getSlotId(): String
-        +getSlotType(): SlotType
-        +getCurrVehicle(): Vehicle
-        +getSlotStatus(): SlotStatus
-        +isChargingAvailable(): boolean
-        +setCurrVehicle(vehicle: Vehicle): void
-        +setSlotStatus(status: SlotStatus): void
-        +print(): void
-    }
-
-    class ParkingFloor {
-        -floorId: int
-        -parkingSlots: List~ParkingSlot~
-        +getFloorId(): int
-        +getParkingSlots(): List~ParkingSlot~
-        +printSlots(): void
-    }
-
-    class EntryGate {
-        -entryGateId: String
-        +getEntryGateId(): String
-        +generateTicket(vehicle: Vehicle, parkingLot: ParkingLot) Ticket
-    }
-
-    class ExitGate {
-        -exitGateId: String
-        +getExitGateId(): String
-        +generateBill(ticket: Ticket, pricingStrategy: PricingStrategy) Bill
-    }
-
-    class Ticket {
-        -ticketId: UUID
-        -vehicle: Vehicle
-        -parkingSlot: ParkingSlot
-        -entryGateId: String
-        -entryTime: LocalDateTime
-        +getTicketId(): UUID
-        +getVehicle(): Vehicle
-        +getParkingSlot(): ParkingSlot
-        +getEntryGateId(): String
-        +getEntryTime(): LocalDateTime
-        +printTicket(): void
-    }
-
-    class Bill {
-        -billId: UUID
-        -exitTime: LocalDateTime
-        -totalAmount: double
-        -ticket: Ticket
-        +getBillId(): UUID
-        +printBill(): void
-    }
-
-    class ParkingLot {
-        -parkinglot: List~ParkingFloor~
-        -entryGates: List~EntryGate~
-        -exitGates: List~ExitGate~
-        -slotAllocatioSt: SlotAllocationStrategy
-        -pricingStrategy: PricingStrategy
-        +getFloors(): List~ParkingFloor~
-        +getSlotAllocationStrategy(): SlotAllocationStrategy
-        +getPricingStrategy(): PricingStrategy
-        +allocateSlot(vehicle: Vehicle) ParkingSlot
-    }
-
-    %% Strategy Implementations
-    class NearestSlotStrategy {
-        +allocateParkingSlot(vehicle: Vehicle, parkingLot: ParkingLot) ParkingSlot
-        -isVehicleCompatible(vehicle: Vehicle, slot: ParkingSlot): boolean
-    }
-
-    class PerHourPricingSt {
-        +calculatePrice(ticket: Ticket) double
-    }
-
-    class DynamicPricing {
-        +calculatePrice(ticket: Ticket) double
-    }
-
-    class Main {
-        +main(args: String[]): void
-    }
-
-    %% Relationships
-    Vehicle --> VehicleType
-    Vehicle --> FuelType
-    ParkingSlot --> SlotType
-    ParkingSlot --> SlotStatus
-    ParkingSlot "1" --> "0..1" Vehicle : currVehicle
-
-    ParkingFloor "1" --> "*" ParkingSlot
-    ParkingLot "1" --> "*" ParkingFloor
-    ParkingLot "1" --> "*" EntryGate
-    ParkingLot "1" --> "*" ExitGate
-    ParkingLot "1" --> "1" SlotAllocationStrategy
-    ParkingLot "1" --> "1" PricingStrategy
-
-    Ticket "1" --> "1" Vehicle
-    Ticket "1" --> "1" ParkingSlot
-    Bill "1" --> "1" Ticket
-
-    EntryGate --> Ticket : generates
-    EntryGate --> ParkingLot : uses
-    ExitGate --> Bill : generates
-    ExitGate --> PricingStrategy : uses
-
-    SlotAllocationStrategy <|.. NearestSlotStrategy
-    PricingStrategy <|.. PerHourPricingSt
-    PricingStrategy <|.. DynamicPricing
-
-    Main --> ParkingLot
-    Main --> Vehicle
-    Main --> EntryGate
-    Main --> ExitGate
-
-    %% Notes
-    note right of ParkingSlot : isChargingAvailable\nfor EV vehicles
-    note right of NearestSlotStrategy : Handles vehicle compatibility\nand EV charging requirements
-    note top of Bill : Includes charging cost\nfor EV vehicles
-
+## Folder Structure
 
 ```
-src/
-├── Main.java
-├── models/
-│   ├── ParkingLot.java
-│   ├── ParkingFloor.java
-│   ├── ParkingSlot.java
-│   ├── EntryGate.java
-│   ├── ExitGate.java
-│   ├── Vehicle.java
-│   ├── Ticket.java
-│   └── Bill.java
-├── enums/
-│   ├── VehicleType.java
-│   ├── SlotType.java
-│   ├── SlotStatus.java
-│   └── FuelType.java
-├── interfaces/
-│   ├── PricingStrategy.java
-│   └── SlotAllocationStrategy.java
-└── strategies/
-    └── PerHourPricingSt.java
-<!-- ```
+cs04_ParkingLot/
+├── src/
+│   ├── Main.java
+│   ├── enums/
+│   │   ├── FuelType.java
+│   │   ├── Payment.java
+│   │   ├── SlotStatus.java
+│   │   ├── SlotType.java
+│   │   └── VehicleType.java
+│   ├── interfaces/
+│   │   ├── PricingStrategy.java
+│   │   └── SlotAllocationStrategy.java
+│   ├── models/
+│   │   ├── Bill.java
+│   │   ├── EntryGate.java
+│   │   ├── ExitGate.java
+│   │   ├── ParkingFloor.java
+│   │   ├── ParkingLot.java
+│   │   ├── ParkingSlot.java
+│   │   ├── Ticket.java
+│   │   └── Vehicle.java
+│   └── strategies/
+│       ├── DynamicPricing.java
+│       ├── NearestSlotStrategy.java
+│       └── PerHourPricingSt.java
+├── out/                    # Compiled classes
+├── class-diagram.png       # UML class diagram
+├── notes.md               # Development notes
+├── settings.json          # Project settings
+└── README.MD              # This file
+```
 
- $files = Get-ChildItem -Recurse -Filter *.java src | ForEach-Object { $_.FullName }
- javac -d out @files  
- java -cp out src.Main

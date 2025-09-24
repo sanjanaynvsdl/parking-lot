@@ -1,2 +1,4 @@
 *.class
 /out
+settings.json
+notes.md
