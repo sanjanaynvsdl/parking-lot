@@ -1,6 +1,8 @@
 package interfaces;
 
+import models.Ticket;
+
 public interface PricingStrategy {
-    double calculatePrice();
+    double calculatePrice(Ticket ticket);
     
 }

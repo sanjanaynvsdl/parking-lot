@@ -15,8 +15,9 @@ public class NearestSlotStrategy implements SlotAllocationStrategy {
     @Override
     public ParkingSlot allocateParkingSlot(Vehicle vehicle, ParkingLot parkingLot) {
         boolean needsCharging = vehicle.getFuelType() == FuelType.ELECTRIC;
+        System.out.println("allocation the slot!");
 
-        for (ParkingFloor floor : parkingLot.getParkinglot()) {
+        for (ParkingFloor floor : parkingLot.getFloors()) {
             for (ParkingSlot slot : floor.getParkingSlots()) {
 
                 // Check if slot is available

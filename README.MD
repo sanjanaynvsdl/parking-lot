@@ -42,3 +42,7 @@ src/
 └── strategies/
     └── PerHourPricingSt.java
 <!-- ```
+
+ $files = Get-ChildItem -Recurse -Filter *.java src | ForEach-Object { $_.FullName }
+ javac -d out @files  
+ java -cp out src.Main

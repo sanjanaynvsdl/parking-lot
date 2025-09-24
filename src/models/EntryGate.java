@@ -26,6 +26,7 @@ public class EntryGate {
         }
 
         return new Ticket(vehicle, slot, this.entryGateId, LocalDateTime.now());
-
     }
+
+
 }

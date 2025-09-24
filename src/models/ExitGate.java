@@ -24,7 +24,7 @@ public class ExitGate {
         ParkingSlot slot = ticket.getParkingSlot();
 
         // Calculate base parking cost
-        double baseCost = pricingStrategy.calculatePrice(ticket.getEntryTime(), exitTime);
+        double baseCost = pricingStrategy.calculatePrice(ticket);
 
         // Add charging cost if EV used charging slot
         double chargingCost = 0;
@@ -39,6 +39,6 @@ public class ExitGate {
         slot.setCurrVehicle(null);
         slot.setSlotStatus(SlotStatus.EMPTY);
 
-        return new Bill(ticket, exitTime, totalAmount, chargingCost);
+        return new Bill(ticket, totalAmount, exitTime);
     }
 }

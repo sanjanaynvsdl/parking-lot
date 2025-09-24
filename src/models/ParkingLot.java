@@ -21,8 +21,16 @@ public class ParkingLot {
         this.pricingStrategy=pricingStrategy;
     }
 
-    public List<ParkingFloor> getParkinglot() {
+    public List<ParkingFloor> getFloors() {
         return parkinglot;
+    }
+
+    public SlotAllocationStrategy getSlotAllocationStrategy() {
+        return this.slotAllocatioSt;
+    }
+
+    public PricingStrategy getPricingStrategy() {
+        return this.pricingStrategy;
     }
 
    public ParkingSlot allocateSlot(Vehicle vehicle) {
@@ -36,4 +44,5 @@ public class ParkingLot {
 
     return slot;
    }
+
 }
