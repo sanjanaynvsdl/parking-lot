@@ -1,4 +1,4 @@
-package src.interfaces;
+package interfaces;
 
 public interface PricingStrategy {
     double calculatePrice();

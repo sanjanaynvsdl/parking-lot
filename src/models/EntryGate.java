@@ -1,5 +1,5 @@
-package src.models;
-import src.interfaces.*;
+package models;
+import interfaces.*;
 
 public class EntryGate {
     private String entryGateId;

@@ -1,7 +1,7 @@
-package src.models;
+package models;
 
-import src.enums.FuelType;
-import src.enums.VehicleType;
+import enums.FuelType;
+import enums.VehicleType;
 
 public class Vehicle {
     private  String vehicalNo;
