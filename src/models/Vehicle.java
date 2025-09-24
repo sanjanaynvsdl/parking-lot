@@ -6,9 +6,10 @@ import enums.VehicleType;
 public class Vehicle {
     private  String vehicalNo;
     private  VehicleType vehicleType;
-    private FuelType fuelType;
+    private  FuelType fuelType;
 
     public Vehicle() {
+        
     }
 
     public Vehicle(String vehicalNo, VehicleType vehicleType, FuelType fuelType) {

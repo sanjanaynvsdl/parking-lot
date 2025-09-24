@@ -12,14 +12,15 @@ public class Ticket {
     public Ticket() {
     }
 
-    public Ticket(UUID ticketId, Vehicle vehicle, ParkingSlot parkingSlot, String entryGateId, LocalDateTime entryTime) {
-        this.ticketId = ticketId;
+    public Ticket(Vehicle vehicle, ParkingSlot parkingSlot, String entryGateId, LocalDateTime entryTime) {
+        this.ticketId = UUID.randomUUID();
         this.vehicle = vehicle;
         this.parkingSlot = parkingSlot;
         this.entryGateId = entryGateId;
         this.entryTime = entryTime;
     }
 
+  
     public UUID getTicketId() {
         return ticketId;
     }

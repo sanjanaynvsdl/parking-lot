@@ -1,4 +1,5 @@
 package models;
+
 import enums.*;
 
 public class ParkingSlot {
@@ -6,15 +7,18 @@ public class ParkingSlot {
     private SlotType slotType;
     private Vehicle currVehicle;
     private SlotStatus slotStatus;
+    private boolean isChargingAvailable;
 
     public ParkingSlot() {
+
     }
 
-    public ParkingSlot(String id, SlotType slotType) {
+    public ParkingSlot(String id, SlotType slotType, boolean isCharging) {
         this.slotId = id;
-        this.slotType=slotType;
-        this.currVehicle=null;
-        this.slotStatus=SlotStatus.EMPTY;
+        this.slotType = slotType;
+        this.currVehicle = null;
+        this.slotStatus = SlotStatus.EMPTY;
+        this.isChargingAvailable = isCharging;
     }
 
     public String getSlotId() {
@@ -33,7 +37,19 @@ public class ParkingSlot {
         return slotStatus;
     }
 
+    public boolean isChargingAvailable() {
+        return isChargingAvailable;
+    }
+
+    public void setCurrVehicle(Vehicle vehicle) {
+        this.currVehicle = vehicle;
+    }
+
+    public void setSlotStatus(SlotStatus status) {
+        this.slotStatus = status;
+    }
+
     public void print() {
-        System.out.println("slot id is : "+slotId);
+        System.out.println("slot id is : " + slotId);
     }
 }

@@ -1,23 +1,31 @@
 package models;
+
+import java.time.LocalDateTime;
+
 import interfaces.*;
 
 public class EntryGate {
     private String entryGateId;
-    private SlotAllocationStrategy slotAllocationSt;
 
     public EntryGate() {
     }
 
-    public EntryGate(String entryGateId, SlotAllocationStrategy slotAllocationSt) {
+    public EntryGate(String entryGateId) {
         this.entryGateId = entryGateId;
-        this.slotAllocationSt = slotAllocationSt;
     }
 
     public String getEntryGateId() {
         return entryGateId;
     }
 
-    public SlotAllocationStrategy getSlotAllocationSt() {
-        return slotAllocationSt;
+    public Ticket generateTicket(Vehicle vehicle, ParkingLot parkingLot) {
+        ParkingSlot slot = parkingLot.allocateSlot(vehicle);
+
+        if (slot == null) {
+            throw new RuntimeException("No available parkingslots");
+        }
+
+        return new Ticket(vehicle, slot, this.entryGateId, LocalDateTime.now());
+
     }
 }

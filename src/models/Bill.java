@@ -1,19 +1,23 @@
 package models;
 
 import java.util.UUID;
+import java.time.LocalDateTime;
 
 public class Bill {
     private UUID billId;
-    private Vehicle vehicle;
-    private double totalAmout;
+    private Ticket ticket;
+    private LocalDateTime exitTime;
+    private double totalAmount;
+    private double chargingCost;
 
     public Bill() {
     }
 
-    public Bill(UUID billId, Vehicle vehicle, double totalAmout) {
-        this.billId = billId;
+    public Bill(Vehicle vehicle, double totalAmout,ExitGate exitGate) {
+        this.billId =UUID.randomUUID() ;
         this.vehicle = vehicle;
         this.totalAmout = totalAmout;
+        this.exitGate=exitGate;
     }
 
     public UUID getBillId() {
