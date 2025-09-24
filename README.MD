@@ -1,4 +1,4 @@
-# Parking Lot Management System
+# Parking Lot
 
 ## Requirements
 
@@ -14,7 +14,6 @@
 - **Smart Allocation**: Allocate nearest available spot
 - **Scalability**: System can be extended with more floors and slots in future
 
-### Core Entities
 - **Ticket**: Contains Vehicle Number | Entry Gate ID | Entry Time | Slot
 - **Bill**: Charges according to spot | Extra charges for electricity usage | Time-based pricing
 
@@ -42,51 +41,4 @@ src/
 │   └── SlotAllocationStrategy.java
 └── strategies/
     └── PerHourPricingSt.java
-```
-
-## Class Diagram
-
-```
-                    ParkingLot
-                        |
-                        | 1..*
-                  ParkingFloor
-                        | 1..*
-                   ParkingSlot
-                   /          \
-                  /            \
-           EntryGate        ExitGate
-                |               |
-             Ticket           Bill
-                |               |
-             Vehicle ───────────┘
-
-    <<interface>>           <<interface>>
-  PricingStrategy     SlotAllocationStrategy
-        |                        |
-  PerHourPricingSt         [implementations]
-```
-
-## Design Patterns Used
-- **Strategy Pattern**: For pricing and slot allocation strategies
-- **Singleton Pattern**: For ParkingLot instance (if applicable)
-- **Factory Pattern**: For creating tickets and bills
-
-## How to Run
-
-```powershell
-# Compile all Java files
-$files = Get-ChildItem -Recurse -Filter *.java src | ForEach-Object { $_.FullName }
-javac -d out $files
-
-# Run the application
-java -cp out src.Main
-```
-
-## Future Enhancements
-- Real-time slot availability tracking
-- Mobile app integration for booking
-- Payment gateway integration
-- Analytics dashboard for parking statistics
-- VIP/Reserved parking slots
-- Multi-level security implementation
+<!-- ```
